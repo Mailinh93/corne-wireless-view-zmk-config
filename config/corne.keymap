@@ -5,55 +5,125 @@
  */
 
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/rgb.h>
+
+// dt-formatter: indent = "  "
+// dt-formatter: reindentMultilineIntegerCells = "dedent"
 
 / {
-        keymap {
-                compatible = "zmk,keymap";
+  behaviors {
+    hm: homerow_mods {
+      compatible = "zmk,behavior-hold-tap";
+      label = "HOMEROW_MODS";
+      #binding-cells = <2>;
+      tapping-term-ms = <150>;
+      quick-tap-ms = <0>;
+      flavor = "tap-preferred";
+      bindings =
+        <&kp>,
+        <&kp>;
+    };
+  };
 
-                default_layer {
-// -----------------------------------------------------------------------------------------
-// | NONE |  Q  |  W  |  F  |  P  |  B  |   |  J  |  L   |  U  |  Y  |  '  | NONE |
-// | NONE |  A  |  S  |  R  |  T  |  G  |   |  M  |  N   |  E |  I  |  O  |  NONE |
-// | NONE |  Z  |  X  |  C  |  D  |  V  |   |  K  | H   |  ,  |  .  |  /  | NONE |
-//                    | LWR | SPC | SPC |   | ENT | RSE  | ALT |
-                        label = "Base";
-                        bindings = <
-   &none   &kp Q &kp W &kp F &kp P &kp B   &kp J &kp L  &kp U     &kp Y   &kp SQT    &none
-  &none LCTRL &kp A &kp S &kp R &kp T &kp G   &kp M &kp N  &kp E     &kp I   &kp O &none
-   &none LSHFT &kp Z &kp X &kp C &kp D &kp V   &kp K &kp H  &kp COMMA &kp DOT &kp FSLH &none
-                  &TOG 1 &kp SPACE &kp CAPS   &kp RET &kp BSPC &TOG 2
-                        >;
-                };
-                lower_layer {
-// -----------------------------------------------------------------------------------------
-// | NONE | BASE |    |  UP  |  CMDT  |  -  |   |  @  |  7  |  8  |  9  |  0  |  NONE |
-// | NONE|   ESC | LFT | DWN | RGT | CMDK |     | ?   |  4  |  5  | 6   |  '  |  NONE |
-// | CMDZ | CMDX | CMDC | CMDV | CMDB |         | !   |  1  |  2  |  3  |  "  |  NONE |      
-//                    | RAISE |  F11  | F12 |     | F4 | F10 | NONE |
-                        label = "Lower";
-                        bindings = <
-   &none    &TOG 0    &kp LG(W)        &kp UP      &kp LG(T)       &kp MINUS         &kp AT   &kp N7   &kp N8 &kp N9    &kp N0 &none
-   &none  &kp ESCAPE &kp LEFT &kp DOWN &kp RIGHT &kp LG(K)   &kp QUESTION &kp N4  &kp N5 &kp N6 &kp SQT &none
-   &kp LG(Z)  &kp LG(X)   &kp LG(C)   &kp LG(V)   &kp LG(B)       &kp EXCL         &trans   &kp N1   &kp N2 &kp N3    &kp DQT &none
-                          	        &TOG 2     &kp F11       &kp F12      &kp F4  &kp F10   &none
-                        >;
-                };
+  combos {
+    compatible = "zmk,combos";
 
-                raise_layer {
-// -----------------------------------------------------------------------------------------
-// | NONE |  !  |  @  |  #  |  $  |  %  |   |  ^  |  &  |  *  |  (  |  )  | NONE |
-// | NONE |  RWD  | FWD |  :  |  ;  |NXT  |   |  -  |  =  |  [  |  ]  |  \  | NONE |
-// | NONE | FF  |  PLAY  | VOLD |VOLU |PREV |   |  _  |  +  |  {  |  }  | "|" | NONE |
-//                    | NONE | NONE | MUTE |   | NONE | BASE | RAISE |
-                        label = "Raise";
-                        bindings = <
-    &none   &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT   &kp CARET &kp AMPS  &kp KP_MULTIPLY &kp LPAR &kp RPAR  &none 
-    &none  &kp C_REWIND  &none &kp COLON   &kp SEMI   &kp  K_NEXT    &kp MINUS &kp EQUAL &kp LBKT        &kp RBKT &kp BSLH  &none 
-    &none  &kp C_FAST_FORWARD  &kp K_PLAY_PAUSE  &kp K_VOLUME_DOWN  &kp K_VOLUME_UP   &kp  K_PREV      &kp UNDER &kp PLUS  &kp LBRC        &kp RBRC &kp PIPE  &none 
-                    	     &none &none  &kp K_MUTE   &none   &TOG 0    &TOG 2 
-                        >;
-                };
-        };
+    tab {
+      bindings = <&trans>;
+      key-positions = <2 3>;
+    };
+
+    ctrl {
+      bindings = <&kp LCTRL>;
+      key-positions = <26 27>;
+    };
+
+    cmd {
+      bindings = <&kp LCMD>;
+      key-positions = <37 38>;
+    };
+
+    alt {
+      bindings = <&kp LEFT_ALT>;
+      key-positions = <39 40>;
+    };
+
+    shift {
+      bindings = <&kp LSHIFT>;
+      key-positions = <8 9>;
+    };
+
+    caps_word {
+      bindings = <&caps_word>;
+      key-positions = <17 18>;
+    };
+
+    delete {
+      bindings = <&kp DEL>;
+      key-positions = <32 33>;
+    };
+
+    new_combo {
+      bindings = <&tog 3>;
+      key-positions = <38 39>;
+      layers = <3>;
+    };
+  };
+
+  macros {
+    zed_em_kay: zed_em_kay {
+      compatible = "zmk,behavior-macro";
+      label = "ZM_zed_em_kay";
+      #binding-cells = <0>;
+      bindings =
+        <&macro_press>,
+        <&kp LSHFT>,
+        <&macro_tap>,
+        <&kp Z &kp M &kp K>,
+        <&macro_release>,
+        <&kp LSHFT>;
+    };
+  };
+
+  keymap {
+    compatible = "zmk,keymap";
+
+    base {
+      bindings = <
+&none  &kp Q  &kp W   &kp F      &kp P     &kp B      &kp J          &kp L      &kp U    &kp Y   &kp SQT  &none
+&none  &kp A  &kp S   &kp R      &kp T     &kp G      &kp M          &kp N      &kp E    &kp I     &kp O  &none
+&none  &kp Z  &kp X   &kp C      &kp D     &kp V      &kp K          &kp H  &kp COMMA  &kp DOT  &kp FSLH  &none
+                     &tog 1  &kp SPACE  &kp CAPS    &kp RET  &kp BACKSPACE     &tog 2
+      >;
+    };
+
+    raise {
+      bindings = <
+&none  &kp LG(Q)  &kp LG(W)     &kp UP  &kp LG(T)  &kp MINUS        &kp AT_SIGN        &kp N7        &kp N8        &kp N9   &kp N0  &none
+&none    &kp ESC   &kp LEFT   &kp DOWN  &kp RIGHT  &kp LG(K)       &kp QUESTION  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &kp SQT  &none
+&none  &kp LG(Z)  &kp LG(X)  &kp LG(C)  &kp LG(V)  &kp LG(B)    &kp EXCLAMATION  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp DQT  &none
+                                &tog 0    &kp F11    &kp F12             &kp F4       &kp F10        &tog 2
+      >;
+    };
+
+    lower {
+      bindings = <
+&none     &kp EXCL      &kp AT          &kp HASH    &kp DLLR          &kp PRCNT    &kp CARET   &kp AMPS  &kp KP_MULTIPLY  &kp LPAR  &kp RPAR  &none
+&none        &none  &kp K_PREV  &kp K_PLAY_PAUSE  &kp K_NEXT    &kp K_VOLUME_UP    &kp MINUS  &kp EQUAL         &kp LBKT  &kp RBKT  &kp BSLH  &none
+&none  &kp K_SLEEP  &kp K_LOCK             &none  &kp K_MUTE  &kp K_VOLUME_DOWN    &kp UNDER   &kp PLUS         &kp LBRC  &kp RBRC  &kp PIPE  &none
+                                           &none       &none             &tog 0       &tog 1  &kp TILDE            &none
+      >;
+    };
+
+    both {
+      bindings = <
+&trans  &trans  &trans  &trans  &trans  &bt BT_SEL 0    &bt BT_SEL 3           &trans           &trans  &trans           &trans    &rgb_ug RGB_COLOR_HSB(0,60,50)
+&trans  &trans  &trans  &trans  &trans  &bt BT_SEL 1    &bt BT_SEL 4        &kp LS(K)  &kp KP_NUMBER_1   &kp N            &kp G  &rgb_ug RGB_COLOR_HSB(120,60,50)
+&trans  &trans  &trans  &trans  &trans  &bt BT_SEL 2      &bt BT_CLR            &kp K            &kp U   &kp B  &kp KP_NUMBER_0  &rgb_ug RGB_COLOR_HSB(240,60,50)
+                        &trans  &trans        &trans       &kp ENTER  &kp EXCLAMATION           &trans
+      >;
+    };
+  };
 };
